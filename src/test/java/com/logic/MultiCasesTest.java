@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-@QuarkusTest
 class MultiCasesTest {
     MultiCases multiCases;
 
@@ -40,5 +40,11 @@ class MultiCasesTest {
     void executeMutisParallelTest() throws ExecutionException, InterruptedException {
         List<String> result = multiCases.executeMutisParallel().collectItems().asList().subscribeAsCompletionStage().get();
         assertArrayEquals(Arrays.asList("this","is","the","first").toArray(), result.toArray());
+    }
+
+    @Test
+    void executeWithRetriesTest() throws ExecutionException, InterruptedException {
+        List<String> result =  multiCases.executeWithRetries().collectItems().asList().subscribeAsCompletionStage().get();
+        assertArrayEquals(Arrays.asList("this").toArray(), result.toArray());
     }
 }
